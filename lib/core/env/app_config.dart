@@ -5,4 +5,5 @@ class AppConstants {
   static const String email = "email";
   static const String password = "password";
   static const String currentPage = "currentPage";
+  static const String userObject = "userObject";
 }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tedfinance_mobile/core/Dashboard/card1/cards/virtual_cards.dart';
+import 'package:tedfinance_mobile/core/Dashboard/dashboard.dart';
 import 'package:tedfinance_mobile/shared/navigations/routes/navigation_service.dart';
 import '../../../../../shared/util/asset_images.dart';
 import '../../../../../shared/util/widgets/custom_containers.dart';
@@ -80,9 +81,8 @@ class VirtualCardActivatedSheet extends StatelessWidget {
                 50.verticalSpace,
                 AppButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    PageNavigator(ctx: context)
-                        .nextPage(page: const VirtualCards());
+                    //Navigator.of(context).pop();
+                    pushToAndClearStack(context, const VirtualCards());
                   },
                   text: 'Done',
                   radius: 30.r,
@@ -167,9 +167,7 @@ class FundAddedSuccessSheet extends StatelessWidget {
                 50.verticalSpace,
                 AppButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    PageNavigator(ctx: context)
-                        .nextPage(page: const VirtualCards());
+                    pushToAndClearStack(context, const VirtualCards());
                   },
                   text: 'Done',
                   radius: 30.r,
@@ -248,9 +246,7 @@ class SuccessfulWithdrawalSheet extends StatelessWidget {
                 50.verticalSpace,
                 AppButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    PageNavigator(ctx: context)
-                        .nextPage(page: const VirtualCards());
+                    pushToAndClearStack(context, const VirtualCards());
                   },
                   text: 'Done',
                   radius: 30.r,
@@ -331,9 +327,7 @@ class FrozenCardSheet extends StatelessWidget {
                 50.verticalSpace,
                 AppButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    PageNavigator(ctx: context)
-                        .nextPage(page: const VirtualCards());
+                    pushToAndClearStack(context, const VirtualCards());
                   },
                   text: 'Done',
                   radius: 30.r,
@@ -387,9 +381,7 @@ class DeleteSuccessSheet extends StatelessWidget {
                 50.verticalSpace,
                 AppButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    PageNavigator(ctx: context)
-                        .nextPage(page: const VirtualCards());
+                    pushToAndClearStack(context, const DashboardScreen());
                   },
                   text: 'Done',
                   radius: 30.r,
@@ -402,4 +394,3 @@ class DeleteSuccessSheet extends StatelessWidget {
     );
   }
 }
-

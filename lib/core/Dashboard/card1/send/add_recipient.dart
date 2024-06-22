@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tedfinance_mobile/core/Dashboard/card1/send/review.dart';
-import 'package:tedfinance_mobile/core/Dashboard/kyc_verification.dart';
+import 'package:tedfinance_mobile/core/Dashboard/kyc/kyc_verification.dart';
 import 'package:tedfinance_mobile/core/env/utils/string_resources.dart';
 import 'package:tedfinance_mobile/shared/navigations/routes/navigation_service.dart';
 import 'package:tedfinance_mobile/shared/util/asset_images.dart';

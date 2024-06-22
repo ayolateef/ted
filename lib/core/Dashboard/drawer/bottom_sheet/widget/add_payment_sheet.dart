@@ -5,7 +5,7 @@ import '../../../../../shared/util/asset_images.dart';
 import '../../../../../shared/util/widgets/custom_containers.dart';
 import '../../../../../theme/custom_text_style.dart';
 import '../../../../env/utils/string_resources.dart';
-import '../../settings/payment/bank_account_details.dart';
+import '../../../card1/transfer/bank_account_details.dart';
 
 class AddPaymentSheet extends StatelessWidget {
   const AddPaymentSheet({super.key});

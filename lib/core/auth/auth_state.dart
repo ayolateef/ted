@@ -5,6 +5,7 @@ import 'package:tedfinance_mobile/core/auth/signup/sign_up.dart';
 
 import '../../shared/models/auth_models/user.dart';
 import '../../shared/navigations/routes/navigation_service.dart';
+import '../../shared/util/storage.dart';
 import '../env/app_config.dart';
 
 class AuthState with ChangeNotifier{
@@ -76,6 +77,19 @@ class AuthState with ChangeNotifier{
       return '';
     }
   }
+
+  // void loadStartUpConfig() async {
+  //   var userObject =
+  //   await LocalStorageUtils.readObject<User>(AppConstants.userObject);
+  //   log(userObject.toString());
+  //   if (userObject != null) {
+  //     User user = User.fromJson(userObject);
+  //     getIt.registerSingleton<User>(user);
+  //
+  //     //! Note: this has to be called after SignInCubit is registered
+  //     getIt.get<SignInCubit>().getProfile(isLogin: true);
+  //   }
+  // }
 
   void logOut(BuildContext context) async {
     final value = await _pref;

@@ -1,6 +1,9 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferenceUtils {
+  static const _storage = FlutterSecureStorage();
+  static const String _pinKey = 'userPin';
   static Future<void> reset() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
@@ -10,6 +13,10 @@ class SharedPreferenceUtils {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.setBool('hasViewedIntroScreens', true);
+  }
+  static Future<void> setLastLoginTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('lastLoginTime', DateTime.now().toString());
   }
 
   static Future<void> setWalletPin(bool value) async {
@@ -38,21 +45,38 @@ class SharedPreferenceUtils {
     prefs.setString('userprofile', user);
   }
 
-  static Future<void> setPin(bool pinset) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isPinSet', pinset);
+  // static Future<void> setPin(bool pinset) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   prefs.setBool('isPinSet', pinset);
+  // }
+  // static Future<String?> getPin() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   return prefs.getString(_pinKey);
+  // }
+  static Future<String?> getPin() async {
+    return await _storage.read(key: 'pin');
   }
-
+  static Future<void> setPin(String pin) async {
+    await _storage.write(key: 'pin', value: pin);
+  }
+  // static Future<void> setPin(String pin) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   prefs.setString(_pinKey, pin);
+  // }
   static Future<void> setDefaultPin(bool pinSet) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('isPinDefault', pinSet);
   }
 
-  static Future<bool> getPin() async {
-    final prefs = await SharedPreferences.getInstance();
-    final bool? isSet = prefs.getBool('isPinSet');
-    return isSet ?? false;
+  static Future<void> deletePin() async {
+    await _storage.delete(key: 'pin');
   }
+
+  // static Future<bool> getPin() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final bool? isSet = prefs.getBool('isPinSet');
+  //   return isSet ?? false;
+  // }
 
   static Future<bool> getDefaultPin() async {
     final prefs = await SharedPreferences.getInstance();
@@ -76,6 +100,14 @@ class SharedPreferenceUtils {
     final String? email = prefs.getString('email');
     return email ?? '';
   }
+  static Future<void> storeName(String name) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('name', name);
+  }
+  static Future<String> getName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('name') ?? '';
+  }
 
   static Future<void> storePassword(String password) async {
   final prefs = await SharedPreferences.getInstance();
@@ -86,5 +118,15 @@ class SharedPreferenceUtils {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getString('password') ?? '';
 
+  }
+
+  static Future<void> storePhoneNum(String phoneNum) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('phoneNum', phoneNum);
+  }
+
+  static Future<String> getPhoneNum() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('phoneNum') ?? '';
   }
 }

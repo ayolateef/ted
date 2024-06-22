@@ -15,7 +15,9 @@ import 'package:tedfinance_mobile/core/Dashboard/drawer/bottom_sheet/widget/conf
 import 'package:tedfinance_mobile/core/Dashboard/drawer/bottom_sheet/widget/confirm_withdraaw_sheet.dart';
 import 'package:tedfinance_mobile/core/Dashboard/drawer/bottom_sheet/widget/enter_pin.dart';
 import 'package:tedfinance_mobile/core/Dashboard/drawer/bottom_sheet/widget/success_payment.dart';
-import 'package:tedfinance_mobile/core/Dashboard/selfie.dart';
+import 'package:tedfinance_mobile/core/Dashboard/kyc/selfie.dart';
+import 'package:tedfinance_mobile/shared/models/dashboard_models/transfer_tedFinance_user.dart';
+import 'package:tedfinance_mobile/shared/models/kyc_model/transfer_model.dart';
 
 import '../../../env/utils/colors.dart';
 
@@ -116,14 +118,33 @@ void verifyAddressSheet({
 
 void confirmAccountSheet({
   BuildContext? context,
+  OutwardTransferModel? outwardTransferModel,
+  String? accountName,
+  String? bankName,
+  String? accountNum,
+  String? clientReference,
+  String? narration,
+  String? bankCode,
+  int? amount
 }) {
   showModalBottomSheet(
     context: context!,
+
+
     barrierColor: AppColors.primaryColor.withOpacity(0.2),
     shape: _roundedRectangleBorder,
     isScrollControlled: true,
     builder: (context) {
-      return const ConfirmAccountSheet();
+      return  ConfirmAccountSheet(
+        outwardTransferModel: outwardTransferModel,
+        accountName: accountName,
+        bankName: bankName,
+        accountNum: accountNum,
+        amount: amount,
+        clientReference: clientReference,
+        narration: narration,
+        bankCode: bankCode ?? '',
+      );
     },
   );
 }
@@ -144,6 +165,14 @@ void confirmWithdrawSheet({
 void enterPinSheet({
   BuildContext? context,
   required bool isFromSellButton,
+  String? originPage,
+  final String? receiverName,
+  final String? receiverUsername,
+  final int? amount,
+  final String? narration,
+  final String? clientReference,
+  final int? receiverId,
+  final String? currency,
 }) {
   showModalBottomSheet(
     context: context!,
@@ -152,7 +181,15 @@ void enterPinSheet({
     isScrollControlled: true,
     builder: (context) {
       return EnterPinSheet(
-          isFromSellButton: isFromSellButton
+          isFromSellButton: isFromSellButton,
+              originPage: originPage ,
+          receiverName: receiverName,
+          receiverUsername: receiverUsername,
+          amount: amount,
+          narration: narration,
+          clientReference: clientReference,
+          receiverId: receiverId,
+          currency: currency
       );
     },
   );
@@ -160,6 +197,12 @@ void enterPinSheet({
 
 void paymentSuccessSheet({
   BuildContext? context,
+  int? totalAmount,
+  String? referenceNumber,
+  String? paymentTime,
+  String? paymentMethod,
+  String? senderName,
+  String? receiverName
 }) {
   showModalBottomSheet(
     context: context!,
@@ -167,7 +210,16 @@ void paymentSuccessSheet({
     shape: _roundedRectangleBorder,
     isScrollControlled: true,
     builder: (context) {
-      return const PaymentSuccessSheet();
+      return  PaymentSuccessSheet(
+          totalAmount: totalAmount,
+          receiverName: receiverName,
+          referenceNumber: referenceNumber,
+          paymentTime: paymentTime,
+          paymentMethod: paymentMethod,
+          senderName: senderName
+
+
+      );
     },
   );
 }
@@ -219,6 +271,14 @@ void withdrawSuccessSheet({
 
 void  withdrawWithUsernameSheet ({
   BuildContext? context,
+  TedFinanceUser? tedFinanceUser,
+  String? receiverUsername,
+  String? receiverName,
+  String? currency,
+  int? amount,
+  int? recieverId,
+  String? clientReference,
+  String? narration,
 }) {
   showModalBottomSheet(
     context: context!,
@@ -226,7 +286,16 @@ void  withdrawWithUsernameSheet ({
     shape: _roundedRectangleBorder,
     isScrollControlled: true,
     builder: (context) {
-      return const WithdrawUsernameSheet();
+      return  WithdrawUsernameSheet(
+        receiverName: receiverName,
+        amount: amount,
+        receiverUsername: receiverUsername,
+        clientReference: clientReference,
+        narration: narration,
+        receiverId: recieverId,
+        currency: currency
+
+      );
     },
   );
 

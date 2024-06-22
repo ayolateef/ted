@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tedfinance_mobile/core/Dashboard/kyc_verification.dart';
+import 'package:tedfinance_mobile/core/Dashboard/kyc/kyc_verification.dart';
 import 'package:tedfinance_mobile/core/env/utils/colors.dart';
 import 'package:tedfinance_mobile/core/env/utils/string_resources.dart';
 import 'package:tedfinance_mobile/theme/custom_text_style.dart';

@@ -1,97 +1,125 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tedfinance_mobile/core/Dashboard/drawer/pay_bills/pay_bills.dart';
 import 'package:tedfinance_mobile/core/Dashboard/drawer/settings/settings_page.dart';
-import 'package:tedfinance_mobile/core/Dashboard/kyc_identity.dart';
+import 'package:tedfinance_mobile/core/Dashboard/kyc/kyc_identity.dart';
+import 'package:tedfinance_mobile/core/auth/login/login_pin.dart';
 import 'package:tedfinance_mobile/shared/navigations/routes/navigation_service.dart';
 import '../../../shared/util/asset_images.dart';
+import '../../../shared/util/share_preference_util.dart';
 import '../../../theme/custom_text_style.dart';
 import '../../env/utils/colors.dart';
 
-Widget buildDrawer(BuildContext context) {
-  return Drawer(
-    width: 235.w,
-    backgroundColor: AppColors.primaryColor,
-    child: ListView(
-      padding: EdgeInsets.zero,
-      children: [
-        Container(
-            margin: EdgeInsets.only(top: 60.h, bottom: 25.h),
-            child: SvgPicture.asset(AssetResources.tedLogo)),
-        const DrawerWhiteContainer(
-          svgIcon: AssetResources.dashboardIcon,
-          drawerText: 'Dashboard',
-        ),
-         DrawerWhiteContainer(
-          onTap: (){
-            PageNavigator(ctx: context).nextPage(page: const KYCIdentity());
-          },
-          svgIcon: AssetResources.kycDashboardIcon,
-          drawerText: 'KYC Verification',
-        ),
-        const DrawerWhiteContainer(
-          svgIcon: AssetResources.transferIcon,
-          drawerText: 'Transfer',
-        ),
-        const DrawerWhiteContainer(
-          svgIcon: AssetResources.sendIcon,
-          drawerText: 'Send Money',
-        ),
-         DrawerWhiteContainer(
-          onTap: (){
-            PageNavigator(ctx: context).nextPage(page: const PayBills());
-          },
-          svgIcon: AssetResources.payBillsIcon,
-          drawerText: 'Pay Bills',
-        ),
-        const DrawerWhiteContainer(
-          svgIcon: AssetResources.exchangeIcon,
-          drawerText: 'Exchange',
-        ),
-        const DrawerWhiteContainer(
-          svgIcon: AssetResources.requestIcon,
-          drawerText: 'Request Payment',
-        ),
-        const DrawerWhiteContainer(
-          svgIcon: AssetResources.virtualIcon,
-          drawerText: 'Virtual Cards',
-        ),
-        const DrawerWhiteContainer(
-          svgIcon: AssetResources.transReportIcon,
-          drawerText: 'Transaction Reports',
-        ),
-        const DrawerWhiteContainer(
-          svgIcon: AssetResources.exchangeIcon,
-          drawerText: 'Exchange',
-        ),
-         DrawerWhiteContainer(
-          onTap: (){
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingsProfilePage())
 
-            );
-            //Navigator.pop(context);
-          },
-          svgIcon: AssetResources.settingsIcon,
-          drawerText: 'Settings',
-        ),
-        const DrawerWhiteContainer(
-          svgIcon: AssetResources.chatTedDashIcon,
-          drawerText: 'Chat Ted',
-        ),
-        30.verticalSpace,
-        DrawerWhiteContainer(
-          drawerContainerColor: Colors.transparent,
-          svgIcon: AssetResources.signOutIcon,
-          drawerText: 'Sign Out',
-          drawerTextColor: AppColors.white,
-        ),
-      ],
-    ),
-  );
+class TedDrawer extends StatefulWidget {
+  const TedDrawer({super.key});
+
+  @override
+  State<TedDrawer> createState() => _TedDrawerState();
 }
+
+class _TedDrawerState extends State<TedDrawer> {
+ TextEditingController? usernameController;
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      backgroundColor: AppColors.primaryColor,
+      width: 235.w,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          Container(
+              margin: EdgeInsets.only(top: 60.h, bottom: 25.h),
+              child: SvgPicture.asset(AssetResources.tedLogo)),
+          const DrawerWhiteContainer(
+            svgIcon: AssetResources.dashboardIcon,
+            drawerText: 'Dashboard',
+          ),
+          DrawerWhiteContainer(
+            onTap: (){
+              PageNavigator(ctx: context).nextPage(page: const KYCIdentity());
+            },
+            svgIcon: AssetResources.kycDashboardIcon,
+            drawerText: 'KYC Verification',
+          ),
+          const DrawerWhiteContainer(
+            svgIcon: AssetResources.transferIcon,
+            drawerText: 'Transfer',
+          ),
+          const DrawerWhiteContainer(
+            svgIcon: AssetResources.sendIcon,
+            drawerText: 'Send Money',
+          ),
+          DrawerWhiteContainer(
+            onTap: (){
+              PageNavigator(ctx: context).nextPage(page: const PayBills());
+            },
+            svgIcon: AssetResources.payBillsIcon,
+            drawerText: 'Pay Bills',
+          ),
+          const DrawerWhiteContainer(
+            svgIcon: AssetResources.exchangeIcon,
+            drawerText: 'Exchange',
+          ),
+          const DrawerWhiteContainer(
+            svgIcon: AssetResources.requestIcon,
+            drawerText: 'Request Payment',
+          ),
+          const DrawerWhiteContainer(
+            svgIcon: AssetResources.virtualIcon,
+            drawerText: 'Virtual Cards',
+          ),
+          const DrawerWhiteContainer(
+            svgIcon: AssetResources.transReportIcon,
+            drawerText: 'Transaction Reports',
+          ),
+          const DrawerWhiteContainer(
+            svgIcon: AssetResources.exchangeIcon,
+            drawerText: 'Exchange',
+          ),
+          DrawerWhiteContainer(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingsProfilePage())
+
+              );
+              //Navigator.pop(context);
+            },
+            svgIcon: AssetResources.settingsIcon,
+            drawerText: 'Settings',
+          ),
+          const DrawerWhiteContainer(
+            svgIcon: AssetResources.chatTedDashIcon,
+            drawerText: 'Chat Ted',
+          ),
+          30.verticalSpace,
+          DrawerWhiteContainer(
+            drawerContainerColor: Colors.transparent,
+            svgIcon: AssetResources.signOutIcon,
+            drawerText: 'Sign Out',
+            drawerTextColor: AppColors.white,
+            onTap: () async {
+              await SharedPreferenceUtils.deletePin();
+
+              // SharedPreferences prefs = await SharedPreferences.getInstance();
+              // prefs.clear();
+
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) =>  LoginPinScreen(username: usernameController?.text ?? '')),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 
 class DrawerWhiteContainer extends StatelessWidget {
   final String svgIcon;

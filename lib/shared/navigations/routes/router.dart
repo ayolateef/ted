@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:tedfinance_mobile/core/Dashboard/bvn.dart';
+import 'package:tedfinance_mobile/core/Dashboard/kyc/bvn.dart';
 import 'package:tedfinance_mobile/core/Dashboard/dashboard.dart';
-import 'package:tedfinance_mobile/core/Dashboard/kyc_identity.dart';
+import 'package:tedfinance_mobile/core/Dashboard/kyc/nin.dart';
+import 'package:tedfinance_mobile/core/Dashboard/kyc/selfie.dart';
 import 'package:tedfinance_mobile/core/Dashboard/routes.dart';
-import 'package:tedfinance_mobile/core/Dashboard/selfie.dart';
-import 'package:tedfinance_mobile/core/Dashboard/upload_files.dart';
 import 'package:tedfinance_mobile/core/auth/signup/create_pin.dart';
 import 'package:tedfinance_mobile/core/auth/signup/create_username.dart';
 
+import '../../../core/Dashboard/card1/cards/activate_card.dart';
+import '../../../core/Dashboard/kyc/kyc-progress.dart';
+import '../../../core/Dashboard/kyc/kyc_identity.dart';
+import '../../../core/Dashboard/kyc/upload_files.dart';
 import '../../../core/auth/forgotPassword/forgot_password.dart';
 import '../../../core/auth/login/login_pin.dart';
 import '../../../core/auth/login/sign_in.dart';
@@ -49,7 +52,7 @@ Route<dynamic>? routes(RouteSettings settings) {
       );
     case AuthRoutes.loginIn:
       return FadeRoute(
-        page: const LoginPinScreen(),
+        page: const LoginPinScreen(username: '',),
       );
     case DashboardRoutes.kycVerification:
       return FadeRoute(
@@ -70,6 +73,18 @@ Route<dynamic>? routes(RouteSettings settings) {
     case DashboardRoutes.bvnVerify:
       return FadeRoute(
         page: const BVNPage(),
+      );
+    case DashboardRoutes.nin:
+      return FadeRoute(
+        page: const NINPage(),
+      );
+    case DashboardRoutes.kycProgress:
+      return FadeRoute(
+        page:  const KYCProgress(),
+      );
+    case DashboardRoutes.activateCard:
+      return FadeRoute(
+        page:  const ActivateCard(),
       );
     default:
       return null;

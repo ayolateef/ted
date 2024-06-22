@@ -8,6 +8,7 @@ class DevConfig implements BaseConfig {
   String get CDN_URL => "https://d3f0n3oggzz6vo.cloudfront.net/";
 
   String get BASE_URL =>
+      //"https://269z8txn0l.execute-api.us-east-1.amazonaws.com/dev/api";
       "http://ec2-50-17-8-125.compute-1.amazonaws.com:3000/api";
   // String get BASE_URL => "https://dev.trybeone.ng";
 

@@ -29,18 +29,20 @@ class VerifySignUpScreen extends StatefulWidget {
 }
 
 class _VerifySignUpScreenState extends State<VerifySignUpScreen> {
-  bool? isVerified;
+  late bool isVerified;
   bool isHovered = false;
   int _countdown = 60;
   Timer? _timer;
   String code = " ";
   bool _isButtonEnabled = false;
+  bool _isLoading = false;
   final TextEditingController _codeController = TextEditingController(text: "");
 
   @override
   void initState() {
     super.initState();
     isVerified = false;
+    _isLoading = false;
     startTimer();
   }
   @override
@@ -74,7 +76,7 @@ class _VerifySignUpScreenState extends State<VerifySignUpScreen> {
                     child: Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 21.0.w, vertical: 28.h),
-                        child: isVerified == true
+                        child: isVerified
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -251,6 +253,20 @@ class _VerifySignUpScreenState extends State<VerifySignUpScreen> {
 
                     ),
                   ),
+                  if (_isLoading)
+                    Visibility(
+                      visible: !isVerified,
+                      child: Positioned.fill(
+                        child: Container(
+                          color: Colors.white.withOpacity(0.5),
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
                 ],
               ),
             ],
@@ -283,6 +299,9 @@ class _VerifySignUpScreenState extends State<VerifySignUpScreen> {
 
 
   void verifyCode(String code) async {
+    setState(() {
+      _isLoading = true;
+    });
     AuthenticationProvider authenticationProvider =
     Provider.of<AuthenticationProvider>(context, listen: false);
     bool isVerified = await authenticationProvider.verifyEmailSignup(
@@ -294,11 +313,16 @@ class _VerifySignUpScreenState extends State<VerifySignUpScreen> {
 
     if (isVerified) {
       setState(() {
-        this.isVerified = true;
+        this.isVerified = isVerified;
+        _isLoading = false;
       });
     } else {
+      setState(() {
+        _isLoading = false;
+      });
       AlertToast(context: context)
           .showError(authenticationProvider.errorMessage);
     }
+
   }
 }

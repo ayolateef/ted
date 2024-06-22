@@ -13,7 +13,7 @@ import '../../../../env/utils/colors.dart';
 import '../../../../env/utils/string_resources.dart';
 import '../../../card1/cards/virtual_cards.dart';
 import '../../pay_bills/cable_tv.dart';
-import '../../settings/payment/bank_account_details.dart';
+import '../../../card1/transfer/bank_account_details.dart';
 
 class UtilitiesSheet extends StatelessWidget {
   const UtilitiesSheet({super.key});

@@ -6,7 +6,8 @@ class StagingConfig implements BaseConfig {
   String get CDN_URL => "https://d3f0n3oggzz6vo.cloudfront.net/";
 
   String get BASE_URL =>
-      "https://iw5ntva5r5.execute-api.af-south-1.amazonaws.com/dev";
+      "https://6ecin8vrfl.execute-api.us-east-1.amazonaws.com/dev";
+      //"https://iw5ntva5r5.execute-api.af-south-1.amazonaws.com/dev";
 
   // String get BASE_URL => "https://dev.trybeone.ng";
 

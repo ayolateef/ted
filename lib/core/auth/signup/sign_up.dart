@@ -18,8 +18,6 @@ import '../../../shared/util/widgets/custom_elevated_button.dart';
 import '../../../shared/util/widgets/custom_text_form_field.dart';
 import '../../../theme/custom_text_style.dart';
 import '../../env/utils/colors.dart';
-import '../login/login_pin.dart';
-import '../onboarding/onboarding_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -35,7 +33,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController passwordController = TextEditingController(text: "");
   TextEditingController emailController = TextEditingController(text: "");
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final bool _isLoading = false;
+   bool _isLoading = false;
 
   @override
   void initState() {
@@ -48,6 +46,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         AlertToast(context: context).showError('Please agree to the terms and conditions');
         return;
       }
+      setState(() {
+        _isLoading = true;
+      });
       try {
         AuthenticationProvider authenticationProvider =
             Provider.of<AuthenticationProvider>(context, listen: false);
@@ -68,17 +69,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
       } catch (e) {
         AlertToast(context: context).showError(e.toString());
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
+
     }
+  }
+
+  Future<bool> onBackPress(context, bool value) {
+    return showDialog <bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Do you wish to exit?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () => {Navigator.pop(context, false)},
+            ),
+            TextButton(
+                onPressed: () => {Navigator.pop(context, true)},
+                child: Text('Exit'))
+          ],
+        )
+    ) as Future<bool> ;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primaryColor,
-      body: PopScope(
-        onPopInvoked: (canPop) async => false,
-        child: SafeArea(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (value) => onBackPress(context, value),
+      child: Scaffold(
+        backgroundColor: AppColors.primaryColor,
+        body: SafeArea(
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
@@ -87,15 +112,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   Stack(
                     children: [
-                      if (_isLoading)
-                        Container(
-                          color: Colors.white.withOpacity(0.5),
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.primaryColor,
-                            ),
-                          ),
-                        ),
                       Container(
                       margin: const EdgeInsets.only(top: 70),
                         width: double.infinity,
@@ -156,6 +172,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 controller: emailController,
                                 hintText: 'Email',
                                 textInputType: TextInputType.emailAddress,
+                                autofocus: false,
                               ),
                               const SizedBox(height: 16.0),
                               CustomTextFormField(
@@ -179,6 +196,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     });
                                   },
                                 ),
+                                autofocus: false,
                               ),
                               const SizedBox(height: 16.0),
                               Row(
@@ -220,11 +238,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     builder: (context, vm, _) {
                                   return AppButton(
                                     onPressed:
-                                        vm.signupViewState == ViewState.busy
+                                       _isChecked
+                                           ? vm.signupViewState == ViewState.busy
                                             ? () {}
                                             : () {
                                                 onSignup();
-                                              },
+                                              }
+                                              : null,
 
                                     isLoading:
                                         vm.signupViewState == ViewState.busy,
@@ -312,6 +332,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
+
+                      if (_isLoading)
+                      Positioned.fill(
+                        child: Container(
+                          color: Colors.white.withOpacity(0.5),
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ],

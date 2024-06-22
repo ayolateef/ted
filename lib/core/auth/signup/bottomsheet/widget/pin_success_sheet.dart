@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tedfinance_mobile/core/Dashboard/dashboard.dart';
+import 'package:tedfinance_mobile/core/auth/login/login_pin.dart';
 import 'package:tedfinance_mobile/core/auth/signup/create_username.dart';
 import 'package:tedfinance_mobile/core/env/utils/string_resources.dart';
 
@@ -90,7 +91,8 @@ class _PinSuccessSheetState extends State<PinSuccessSheet> {
 
 
 class WelcomeSheet extends StatefulWidget {
-  const WelcomeSheet({super.key});
+  final String username;
+  const WelcomeSheet({super.key, required this.username});
 
   @override
   State<WelcomeSheet> createState() => _WelcomeSheetState();
@@ -147,8 +149,7 @@ class _WelcomeSheetState extends State<WelcomeSheet> {
                   child: AppButton(
                     onPressed: () {
                       Navigator.of(context).pop();
-                      PageNavigator(ctx: context)
-                          .nextPage(page: const DashboardScreen());
+                  pushToWithRoute(context, CustomRoutes.fadeIn( LoginPinScreen(username: widget.username,)));
                     },
                     text: 'Dashboard',
                     color: isHovered

@@ -11,27 +11,19 @@ class StepperContainer extends StatefulWidget {
   final String rowText;
   final BoxDecoration? boxDecoration;
   final double padding;
-  final int currentStep;
   final int totalSteps;
   final String? longText;
   final VoidCallback? onNextStep;
 
-  const StepperContainer({super.key,
-    required this.svgIcon,
-    required this.rowText,
-    this.boxDecoration,
-    this.padding = 8.0,
-    required this.currentStep,
-    required this.totalSteps,
-    this.longText,
-    this.onNextStep,
-  });
+  const StepperContainer({required this.svgIcon, required this.rowText, this.boxDecoration, this.padding = 8.0, required this.totalSteps, this.longText, this.onNextStep});
 
   @override
   _StepperContainerState createState() => _StepperContainerState();
 }
 
 class _StepperContainerState extends State<StepperContainer> {
+  int _currentStep = 0;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -43,11 +35,12 @@ class _StepperContainerState extends State<StepperContainer> {
           borderRadius: BorderRadius.circular(50),
         ),
         child: Stepper(
+
           steps: [
             Step(
-              title:  Column(
+              state: StepState.indexed,
+              title: Column(
                 children: [
-
                   const SizedBox(width: 5.0),
                   Row(
                     children: [
@@ -58,7 +51,7 @@ class _StepperContainerState extends State<StepperContainer> {
                         decoration: widget.boxDecoration,
                         child: SvgPicture.asset(widget.svgIcon),
                       ),
-                      const SizedBox(width: 20.0), // Fixed horizontal space
+                      const SizedBox(width: 20.0),
                       Text(
                         widget.rowText,
                         style: CustomTextStyles.titleMedium18,
@@ -76,42 +69,22 @@ class _StepperContainerState extends State<StepperContainer> {
                   ),
                 ],
               ),
-              content: Text(' '),
-
-
+              content: Text(''),
             )
           ],
-          // children: [
-          //
-          //   const SizedBox(width: 20.0), // Fixed vertical space
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     for (int i = 0; i < widget.totalSteps; i++) // Dynamic circle generation
-            //       _buildStepCircle(i),
-            //     const SizedBox(width: 5.0), // Spacing after circles
-            //   ],
-            // ),
-          //   const SizedBox(height: 5.0), // Spacing after circles
-          //   Expanded( // Use Expanded for remaining space
-          //     child: Text(
-          //       widget.longText ?? '',
-          //       style: GoogleFonts.poppins(
-          //         textStyle: TextStyle(
-          //           fontSize: 12.sp,
-          //           fontWeight: FontWeight.w400,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ],
+          currentStep: _currentStep,
+          onStepTapped: (step) {
+            setState(() {
+              _currentStep = step;
+            });
+          },
         ),
       ),
     );
   }
 
   Widget _buildStepCircle(int stepIndex) {
-    final isActive = stepIndex <= widget.currentStep;
+    final isActive = stepIndex <= _currentStep;
     final color = isActive ? Colors.black : Colors.grey;
     return Container(
       width: 30.0,

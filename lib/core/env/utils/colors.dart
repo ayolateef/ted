@@ -95,6 +95,7 @@ class AppColors {
   static const tedGradientColor2 = Color(0xFF02E4F0);
   static const tedSmallCircleGreyColor = Color(0xff555555);
   static const tedRedColor2 = Color(0XFFFF4F5A);
+  static const tedYellow2 = Color(0xFFF7C516);
 
 
 

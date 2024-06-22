@@ -1,18 +1,73 @@
+import 'dart:core';
+import 'dart:core';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:tedfinance_mobile/core/Dashboard/card1/cards/enter_pin.dart';
+import 'package:tedfinance_mobile/core/Dashboard/drawer/bottom_sheet/widget/enter_pin.dart';
 import 'package:tedfinance_mobile/core/env/utils/colors.dart';
 import 'package:tedfinance_mobile/core/env/utils/string_resources.dart';
+import 'package:tedfinance_mobile/core/utililies.dart';
 import 'package:tedfinance_mobile/shared/util/asset_images.dart';
 import 'package:tedfinance_mobile/shared/util/widgets/custom_elevated_button.dart';
 
+import '../../../../../providers/dashboard_provider.dart';
+import '../../../../../shared/models/kyc_model/transfer_model.dart';
 import '../../../../../shared/navigations/routes/navigation_service.dart';
 import '../../../../../theme/custom_text_style.dart';
-import '../../settings/payment/traansfer.dart';
+import '../../../card1/transfer/traansfer.dart';
 
-class ConfirmAccountSheet extends StatelessWidget {
-  const ConfirmAccountSheet({super.key});
+class ConfirmAccountSheet extends StatefulWidget {
+  final String? accountName;
+  final String? bankName;
+  final String? accountNum;
+  final int? amount;
+  final String? clientReference;
+  final String? narration;
+  final String? bankCode;
+  final OutwardTransferModel? outwardTransferModel;
+
+  const ConfirmAccountSheet({super.key,
+    this.accountName,
+    this.bankName,  this.accountNum, this.amount, this.clientReference, this.narration, this.bankCode, this.outwardTransferModel});
+
+  @override
+  State<ConfirmAccountSheet> createState() => _ConfirmAccountSheetState();
+}
+
+class _ConfirmAccountSheetState extends State<ConfirmAccountSheet> {
+  OutwardTransferModel? outwardTransferModel;
+
+Utilities utilis = Utilities();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() async {
+      Provider.of<DashboardProvider>(context, listen: false)
+          .outwardTransfer(
+          destinationAccount: widget.accountNum ?? '',
+          destinationAccountName: widget.accountName ?? '',
+          destinationBankName:  widget.bankName ?? '',
+
+      )
+          .then((value) {
+        if (mounted) {
+          setState(() {
+            outwardTransferModel= value;
+          });
+        }
+      });
+
+    });
+
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -93,20 +148,21 @@ class ConfirmAccountSheet extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Abdullateef Ayodele\nSalaudeen',
+                          Text(  widget.accountName ?? 'Abdullateef Ayodele ',
                               style:
                                   CustomTextStyles.titleSmallBlack400.copyWith(
                                 fontWeight: FontWeight.w600,
                               )),
                           43.verticalSpace,
-                          Text('Kuda Bank',
+                          Text(
+                             utilis. shortenBankName(widget.bankName ?? 'Kuda Bank'),
                               style:
                                   CustomTextStyles.titleSmallBlack400.copyWith(
                                 fontWeight: FontWeight.w600,
                               )),
                           18.verticalSpace,
                           Text(
-                            '222222222',
+                             widget.accountNum ?? '222222222',
                             style: CustomTextStyles.titleSmallBlack400.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
@@ -122,8 +178,25 @@ class ConfirmAccountSheet extends StatelessWidget {
             60.verticalSpace,
             AppButton(
               onPressed: () {
-                Navigator.of(context).pop();
-                PageNavigator(ctx: context).nextPage(page: const TransferPage());
+                // pushToWithRoute(context, CustomRoutes.slideIn(EnterPinVirtualSheet(
+                //   originPage: "OutWardTransfer",
+                // outwardTransferModel: outwardTransferModel,
+                //
+                //
+                // //     OutwardTransferModel result =
+                // // await Provider.of<DashboardProvider>(context, listen: false)
+                // //     .outwardTransfer(
+                // //   sourceAccountId: walletModel!.accountId.toString(),
+                // //   amount: int.parse(_amountController.text),
+                // //   clientReference: utils.generateClientReference(),
+                // //   narration: _narrationController.text,
+                // //   destinationBankCode: selectedBank!.bankCode ?? '',
+                // //   destinationAccount: _accountNumberController.text,
+                // //   destinationAccountName: _fullNameController.text,
+                // //   destinationBankName: selectedBank!.displayName,
+                // // );
+                // ) ));
+              pushToAndClearStack(context, const TransferPage());
               },
               text: 'Add Payment Method',
               width: 350.w,

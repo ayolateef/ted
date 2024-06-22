@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tedfinance_mobile/core/Dashboard/kyc_verification.dart';
+import 'package:tedfinance_mobile/core/Dashboard/kyc/kyc_verification.dart';
 
 import '../../../../shared/navigations/routes/navigation_service.dart';
 import '../../../../shared/util/asset_images.dart';

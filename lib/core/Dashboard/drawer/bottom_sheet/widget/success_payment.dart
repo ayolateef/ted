@@ -3,17 +3,52 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:tedfinance_mobile/core/Dashboard/body_dashboard.dart';
+import 'package:tedfinance_mobile/core/Dashboard/dashboard.dart';
+import 'package:tedfinance_mobile/shared/navigations/routes/navigation_service.dart';
 import 'package:tedfinance_mobile/theme/custom_text_style.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../providers/dashboard_provider.dart';
+import '../../../../../shared/models/dashboard_models/send_money_to_tedfinance.dart';
 import '../../../../../shared/util/asset_images.dart';
+import '../../../../../shared/util/file_utils.dart';
 import '../../../../../shared/util/widgets/custom_elevated_button.dart';
 import '../../../../env/utils/colors.dart';
 import '../../../../env/utils/string_resources.dart';
 import '../root.dart';
 
-class PaymentSuccessSheet extends StatelessWidget {
-  const PaymentSuccessSheet({super.key});
+class PaymentSuccessSheet extends StatefulWidget {
+  final int? totalAmount;
+     final  String? referenceNumber;
+ final  String? paymentTime;
+      final String? paymentMethod;
+ final  String? senderName;
+     final  String? receiverName;
+  const PaymentSuccessSheet({super.key, this.totalAmount, this.referenceNumber, this.paymentTime, this.paymentMethod, this.senderName, this.receiverName});
 
+  @override
+  State<PaymentSuccessSheet> createState() => _PaymentSuccessSheetState();
+}
+
+class _PaymentSuccessSheetState extends State<PaymentSuccessSheet> {
+  SendMoneyToTedUser? sendMoneyToTedUser;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() async {
+      Provider.of<DashboardProvider>(context, listen: false)
+          .sendMoneyToTedFinanceUser()
+          .then((value) {
+        setState(() {
+        //  sendMoneyToTedUser = value;
+        });
+      });
+
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -70,7 +105,7 @@ class PaymentSuccessSheet extends StatelessWidget {
                           style: CustomTextStyles.titleSmallBlack400,
                         ),
                         10.verticalSpace,
-                        Text('\$\4,500.00 USD',
+                        Text(   sendMoneyToTedUser?.totalAmount?.toString() ?? '\$\4,500.00 USD',
                             style: CustomTextStyles.titleLargeBlack),
                         15.verticalSpace,
                         Column(
@@ -80,14 +115,14 @@ class PaymentSuccessSheet extends StatelessWidget {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const PaymentContainerSheet(
+                                 PaymentContainerSheet(
                                   titleText: 'Ref Number',
-                                  subTitle: '000085752257',
+                                  subTitle: sendMoneyToTedUser?.transactionReference ??  '000085752257',
                                 ),
                                 20.horizontalSpace,
                                 const PaymentContainerSheet(
                                   titleText: 'Payment Time',
-                                  subTitle: '25 Feb 2023, 13:22',
+                                  subTitle:   '25 Feb 2023, 13:22',
                                 )
                               ],
                             ),
@@ -95,14 +130,14 @@ class PaymentSuccessSheet extends StatelessWidget {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const PaymentContainerSheet(
+                                 PaymentContainerSheet(
                                   titleText: StringResources.payment_method,
-                                  subTitle: 'Card Transfer',
+                                  subTitle:  sendMoneyToTedUser?.transferType ?? 'Card Transfer',
                                 ),
                                 20.horizontalSpace,
-                                const PaymentContainerSheet(
+                                 PaymentContainerSheet(
                                   titleText: 'Sender Name',
-                                  subTitle: 'Bukayo Saka',
+                                  subTitle: sendMoneyToTedUser?.sourceAccountName ?? 'Bukayo Saka',
                                 )
                               ],
                             ),
@@ -110,7 +145,14 @@ class PaymentSuccessSheet extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SvgPicture.asset(AssetResources.importIcon),
+                                InkWell(
+                                  onTap: () async {
+                                    final pdf = await generatePdf();
+                                    final url = await PdfUtils.saveAndSharePdf(pdf, 'transaction.pdf');
+                                    await launchUrl(Uri.parse(url));
+                                  },
+                                  child: SvgPicture.asset(AssetResources.importIcon),
+                                ),
                                 10.horizontalSpace,
                                 const Text(
                                   StringResources.get_pdf,
@@ -139,11 +181,12 @@ class PaymentSuccessSheet extends StatelessWidget {
               100.verticalSpace,
               AppButton(
                 onPressed: () {
-                  enterPinSheet(
-                      context: context,
-                      isFromSellButton: false
-
-                  );
+                  pushToAndClearStack(context, const DashboardScreen());
+                  // enterPinSheet(
+                  //     context: context,
+                  //     isFromSellButton: false
+                  //
+                  // );
 
                 },
                 text: 'Done',

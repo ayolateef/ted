@@ -8,6 +8,7 @@ class StringResources{
   static const global_access = "Global Access to the world.";
   static const BVN = "BVN";
   static const NIN = "NIN";
+  static const KYC_Progress = "KYC Progress";
   static const forgot_password = "Forget password";
   static const Verify_Sign_Up = "Verify Sign up";
   static const Change_email = "Change your Email address";
@@ -87,7 +88,7 @@ class StringResources{
 
 
   static const method_via_credit =  "Methods Via Credit/Debit Card or\nBank Transfer";
-  static const ayoLateef = "Salaudeen Abdullateef Ayodele";
+  static const ayoLateef = "Salaudeen Abdullateef Ayo";
   static const bank = "Bank";
   static const send_bank_account = "Send to Bank Account";
   static const username = "Username";

@@ -31,7 +31,7 @@ class AssetResources {
   static const frame4 = "assets/images/dashboard/frame4_selfie.svg";
   static const blackWhyIcon = "assets/images/dashboard/blackWhyIcon.svg";
   static const dropdownIcon = "assets/images/dashboard/dropDownIcon.svg";
-  static const calendarIcon = "assets/images/dashboard/CalendarIcon.svg";
+  static const calendarIcon = "assets/images/dashboard/Calendar.svg";
   static const instagramIcon = "assets/images/dashboard/Instagram.svg";
   static const linkedinIcon = "assets/images/dashboard/Linkedin.svg";
   static const snapchatIcon = "assets/images/dashboard/Snapchat.svg";
@@ -57,6 +57,7 @@ class AssetResources {
   static const sendIcon = "assets/images/dashboard/pauseIcon.svg";
   static const reportIcon = "assets/images/dashboard/reportIcon.svg";
   static const reportIcon2 = "assets/images/dashboard/fullReportIcon.svg";
+  static const reportIconWhiteCircle = "assets/images/dashboard/reportIcon.png";
   static const transferIcon = "assets/images/dashboard/transferIcon.svg";
   static const questionIcon = "assets/images/dashboard/queMarkIcon.svg";
 
@@ -95,7 +96,10 @@ class AssetResources {
   static const listTileImage2 = "assets/images/dashboard/listTileImage.png";
   static const paymentCableImage = "assets/images/dashboard/cablePaymentImage.png";
   static const paymentCableImage2 = "assets/images/dashboard/cablePaymentImage.svg";
+  static const kycIdentityImage = "assets/images/dashboard/kycIdentityImage.png";
 
+  static const ngnIcon = "assets/images/dashboard/ngnIcon.svg";
+  static const usdIcon = "assets/images/dashboard/usdIcon.svg";
 
 
 
@@ -107,8 +111,13 @@ class AssetResources {
 
   static const tedLogo = "assets/images/drawer/tedLogo.svg";
   static const blackStepperIcon = "assets/images/dashboard/stepper_hor_line.svg";
+  static const step1 = "assets/images/dashboard/step1.svg";
+  static const step2 = "assets/images/dashboard/step2.png";
+  static const step3 = "assets/images/dashboard/step3.svg";
+  static const step4 = "assets/images/dashboard/step4.svg";
+
   static const blackStepperIcon2 = "assets/images/dashboard/black_stepper_line2.svg";
-  static const tedLogo2 = "assets/images/dashboard/tedLogo.svg";
+  static const tedLogo2 = "assets/images/dashboard/tedLogo.png";
   static const dashboardIcon = "assets/images/drawer/dashboardIcon.svg";
   static const gotvIcon = "assets/images/drawer/gotvIcon.svg";
   static const mtnIcon = "assets/images/drawer/mtnIcon.svg";
@@ -181,10 +190,12 @@ class AssetResources {
   static const successWithdrawalImage ="assets/images/dashboard/successWithdrawalImage.svg";
   static const successWithdrawalImage2 ="assets/images/dashboard/withdrawalSuccessImage.png";
   static const freezeCardImage ="assets/images/dashboard/freezeCardImage.png";
+  static const freezeIcon ="assets/images/dashboard/freezeImage.png";
   static const freezeCardImage2 ="assets/images/dashboard/frozenImage.png";
   static const deleteCardImage ="assets/images/dashboard/deleteCardImage.svg";
   static const deleteCardImage2 ="assets/images/dashboard/deleteCardImage.png";
   static const deleteSuccessImage ="assets/images/dashboard/deleteSuccessImage.png";
+  static const editImage ="assets/images/dashboard/whiteEditIcon.svg";
 
   static const investmentImage1 ="assets/images/invest/investmentImage.png";
   static const investmentImage2 ="assets/images/invest/InvestmentImage2.png";

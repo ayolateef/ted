@@ -645,3 +645,59 @@ class AnalysisContainer extends StatelessWidget {
     );
   }
 }
+
+class smallTextContainer extends StatelessWidget {
+  final String text;
+  const smallTextContainer({
+    super.key, required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+          horizontal: 16.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color:
+        AppColors.lightPurpleColor.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: AppColors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+class smallIconContainer extends StatelessWidget {
+  final String svgIcon;
+  final Function()? onPressed;
+  const smallIconContainer({
+    super.key,
+    required this.svgIcon,
+    this.onPressed
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        Navigator.of(context).pop();
+      },
+      child: Container(
+        width: 30,
+        height: 30,
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: AppColors.lightPurpleColor,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: SvgPicture.asset(svgIcon),
+      ),
+    );
+  }
+}

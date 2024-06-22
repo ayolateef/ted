@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,26 @@ import 'package:tedfinance_mobile/core/env/utils/string_resources.dart';
 import 'package:uuid/uuid.dart';
 
 class Utilities {
+
+  String shortenBankName(String bankName) {
+    if (bankName.length > 15) {
+      return '${bankName.substring(0, 12)}...';
+    }
+    return bankName;
+  }
+
+  String generateClientReference() {
+    final random = Random();
+    const availableChars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789';
+    final randomString = String.fromCharCodes(
+      Iterable.generate(
+        10,
+            (_) => availableChars.codeUnitAt(random.nextInt(availableChars.length)),
+      ),
+    );
+    return randomString;
+  }
   static String nairaSign = "₦";
   //static String nairaSign = "NGN";
   static String getInitials(String firstName, String lastName) {
@@ -21,7 +42,15 @@ class Utilities {
 
     return initials.toUpperCase();
   }
+  String formatCardNumber(String number) {
+    return number.replaceAllMapped(RegExp(r".{4}"), (match) => "${match.group(0)} ");
+  }
 
+
+  static String formatNumber(double value) {
+    final formatter = NumberFormat("#,##0.00");
+    return formatter.format(value);
+  }
   static String name({firstname, displayName, fullName, String? tag}) {
     if (displayName != null && displayName != "") {
       return displayName;
@@ -123,28 +152,32 @@ class Utilities {
 
     return text;
   }
-
   static String dayMonthFormat({required String date}) {
     try {
-      if (date.contains(new RegExp(r'[A-Z]'))) {
-        if (date.length >= 5) {
-          date = date.substring(0, date.length - 4);
-        }
-        return date;
-      }
-
-      var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
-      var inputDate = inputFormat.parse("${date} 00:00:00.000000");
-
-      var outputFormat = DateFormat('d MMMM');
-      var outputDate = outputFormat.format(inputDate);
-      return outputDate;
+      return DateFormat("dd-MM-yyyy hh:mma").format(DateTime.parse(date));
     } catch (e) {
       return date;
     }
-    //
-    //return "${DateFormat.d().format(date)}-${DateFormat.M().format(date)}}";
   }
+  // static String dayMonthFormat({required String date}) {
+  //   try {
+  //     if (date.contains(new RegExp(r'[A-Z]'))) {
+  //       if (date.length >= 5) {
+  //         date = date.substring(0, date.length - 4);
+  //       }
+  //       return date;
+  //     }
+  //
+  //     var inputFormat = DateFormat('dd/MM/yyyy HH:mm');
+  //     var inputDate = inputFormat.parse("$date 00:00:00.000000");
+  //
+  //     var outputFormat = DateFormat("dd-MM-yyyy hh:mma");
+  //     var outputDate = outputFormat.format(inputDate);
+  //     return outputDate;
+  //   } catch (e) {
+  //     return date;
+  //   }
+  // }
 
   static String yearDayMonthDashSeperated({required DateTime date}) {
     return "${DateFormat.y().format(date)}-${DateFormat.d().format(date)}-${DateFormat.M().format(date)}";

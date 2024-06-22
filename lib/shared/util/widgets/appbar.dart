@@ -68,7 +68,8 @@ class TedAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: leadingIcon ??
           IconButton(
               onPressed: () {
-             Navigator.of(context).pop();
+                pop(context);
+             //Navigator.of(context).pop();
             },
             icon: SvgPicture.asset(AssetResources.shortLeftArrow,)
           ),

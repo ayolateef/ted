@@ -22,92 +22,95 @@ class DetailsFundAccount extends StatefulWidget {
 class _DetailsFundAccountState extends State<DetailsFundAccount> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TedAppBar(
-          elevation: 0, titleWidget: _buildTitleWidget(widget.selectedItem)),
-      body: Stack(
-        children: [
+    return  PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: TedAppBar(
+            elevation: 0, titleWidget: _buildTitleWidget(widget.selectedItem)),
+        body: Stack(
+          children: [
 
-          Positioned(
-            right: -120,
-            top: 0,
-            child: Container(
-              width: 180,
-              height: 180,
-              decoration: BoxDecoration(
-                color: Colors.purple, // Change color to purple
-                borderRadius:BorderRadius.circular(100.r)
+            Positioned(
+              right: -120,
+              top: 0,
+              child: Container(
+                width: 180,
+                height: 180,
+                decoration: BoxDecoration(
+                  color: Colors.purple, // Change color to purple
+                  borderRadius:BorderRadius.circular(100.r)
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 18.w, vertical: 15.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.white2,
-                    borderRadius: BorderRadius.circular(10.r),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 18.w, vertical: 15.h),
+                    decoration: BoxDecoration(
+                      color: AppColors.white2,
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTextFormField(
+                          headerText: "Account Name",
+                          hintText: "Account Name",
+                          textFontSize: 12.sp,
+                          headerTextColor: AppColors.primaryColor,
+                          borderDecoration: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50.r),
+                          ),
+                          focusDecoration: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50.r),
+                          ),
+                        ),
+                        20.verticalSpace,
+                        CustomTextFormField(
+                          headerText: "Account Number",
+                          hintText: "2001399421",
+                          textFontSize: 12.sp,
+                          headerTextColor: AppColors.primaryColor,
+                          borderDecoration: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50.r),
+                          ),
+                          focusDecoration: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50.r),
+                          ),
+                        ),
+                        20.verticalSpace,
+                        CustomTextFormField(
+                          headerText: "Bank Name",
+                          hintText: "GTB",
+                          textFontSize: 12.sp,
+                          headerTextColor: AppColors.primaryColor,
+                          borderDecoration: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50.r),
+                          ),
+                          focusDecoration: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50.r),
+                          ),
+                        ),
+                        80.verticalSpace,
+                        AppButton(
+                          onPressed: () {},
+                          radius: 30.r,
+                          height: 64.h,
+                          child: const CopyButton(),
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomTextFormField(
-                        headerText: "Account Name",
-                        hintText: "Account Name",
-                        textFontSize: 12.sp,
-                        headerTextColor: AppColors.primaryColor,
-                        borderDecoration: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50.r),
-                        ),
-                        focusDecoration: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50.r),
-                        ),
-                      ),
-                      20.verticalSpace,
-                      CustomTextFormField(
-                        headerText: "Account Number",
-                        hintText: "2001399421",
-                        textFontSize: 12.sp,
-                        headerTextColor: AppColors.primaryColor,
-                        borderDecoration: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50.r),
-                        ),
-                        focusDecoration: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50.r),
-                        ),
-                      ),
-                      20.verticalSpace,
-                      CustomTextFormField(
-                        headerText: "Bank Name",
-                        hintText: "GTB",
-                        textFontSize: 12.sp,
-                        headerTextColor: AppColors.primaryColor,
-                        borderDecoration: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50.r),
-                        ),
-                        focusDecoration: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50.r),
-                        ),
-                      ),
-                      80.verticalSpace,
-                      AppButton(
-                        onPressed: () {},
-                        radius: 30.r,
-                        height: 64.h,
-                        child: const CopyButton(),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
 
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -24,7 +24,7 @@ class CustomPinCodeTextField extends StatelessWidget {
 
   final Alignment? alignment;
 
-  final BuildContext context;
+  final BuildContext? context;
 
   final TextEditingController? controller;
 
@@ -53,7 +53,7 @@ class CustomPinCodeTextField extends StatelessWidget {
 
   Widget get pinCodeTextFieldWidget => PinCodeTextField(
         readOnly: readOnly!,
-        appContext: context,
+        appContext: context!,
         controller: controller,
         length: 4,
         keyboardType: TextInputType.number,

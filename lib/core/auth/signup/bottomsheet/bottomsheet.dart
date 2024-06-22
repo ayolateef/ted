@@ -26,6 +26,7 @@ void pinSuccessSheet({
 }
 void welcomeSheet({
   BuildContext? context,
+  TextEditingController? usernameController,
 }) {
   showModalBottomSheet(
     context: context!,
@@ -33,7 +34,7 @@ void welcomeSheet({
     shape: _roundedRectangleBorder,
     isScrollControlled: true,
     builder: (context) {
-      return const WelcomeSheet();
+      return  WelcomeSheet(username: usernameController!.text,);
     },
   );
 }

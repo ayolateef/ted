@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:tedfinance_mobile/shared/models/dashboard_models/card_transactions_model.dart';
+import 'package:intl/intl.dart';
 import '../../core/env/utils/colors.dart';
+import '../../core/utililies.dart';
 import '../../theme/custom_text_style.dart';
+import 'asset_images.dart';
 
 class WhiteCircularIcons extends StatelessWidget {
   final String? circleText;
@@ -137,51 +140,88 @@ class PurpleCardWithIcons extends StatelessWidget {
 }
 
 class CustomCard extends StatelessWidget {
-  final String image;
-  final String title;
-  final String subtitle;
-  final String trailingText;
-  final String trailingSubtitle;
+  final TransactionsModel transactionsModel;
+  // final String image;
+  // final String title;
+  // final String subtitle;
+  // final String trailingText;
+  // final String trailingSubtitle;
 
   const CustomCard({
     Key? key,
-    required this.image,
-    required this.title,
-    required this.subtitle,
-    required this.trailingText,
-    required this.trailingSubtitle,
+    // required this.image,
+    // required this.title,
+    // required this.subtitle,
+    // required this.trailingText,
+    // required this.trailingSubtitle,
+    required this.transactionsModel,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: SvgPicture.asset(image),
+        leading: Image.asset(AssetResources.nigWhiteFlag2),
+
+        //SvgPicture.asset(transactionsModel.currency.toString()),
         title: Text(
-            title,
+            transactionsModel.transactionType.toString(),
             style:CustomTextStyles.titleMedium18
         ),
         subtitle: Text(
-          subtitle,
+          transactionsModel.transactionStatus.toString(),
           style: TextStyle(color: AppColors.primaryButtonColor, fontWeight: FontWeight.w400, fontSize: 12.sp),
         ),
         trailing: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-                trailingText,
-                style:CustomTextStyles.titleMedium18.copyWith(
-                  color: AppColors.primaryButtonColor,
-                )
-            ),
-            Text(
-              trailingSubtitle,
-              style: CustomTextStyles.bodySmallGray500.copyWith(
-                  fontSize: 13.sp
+              '\$${transactionsModel.amount.toString()}',
+              style: CustomTextStyles.titleMedium18.copyWith(
+                color: AppColors.primaryButtonColor,
               ),
             ),
+
+            Text(
+              Utilities.dayMonthFormat(date: transactionsModel.createdAt.toString()),
+              style: CustomTextStyles.bodySmallGray500.copyWith(fontSize: 13.sp),
+            )
+
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CardSettings extends StatelessWidget {
+  final String? svgIcon;
+  final dynamic textCard;
+  final Function()? onTap;
+  const CardSettings({
+    super.key,
+    this.svgIcon,
+    this.textCard,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SvgPicture.asset(svgIcon ?? ''),
+          7.verticalSpace,
+          textCard is String
+              ? Text(
+            textCard,
+            style: CustomTextStyles.bodySmallBlack900
+                .copyWith(fontWeight: FontWeight.w600, fontSize: 10.sp),
+          )
+              : textCard, // Assuming textCard is a Widget
+        ],
       ),
     );
   }

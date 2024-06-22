@@ -2,7 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:tedfinance_mobile/providers/dashboard_provider.dart';
+import 'package:tedfinance_mobile/shared/models/dashboard_models/send_money_to_tedfinance.dart';
+import 'package:tedfinance_mobile/shared/models/dashboard_models/username_lookup_model.dart';
+import '../../../../../shared/models/dashboard_models/transfer_tedFinance_user.dart';
+import '../../../../../shared/models/dashboard_models/wallet_model.dart';
 import '../../../../../shared/util/asset_images.dart';
+import '../../../../../shared/util/shimmer.dart';
 import '../../../../../shared/util/widgets/custom_elevated_button.dart';
 import '../../../../../theme/custom_text_style.dart';
 import '../../../../env/utils/colors.dart';
@@ -11,7 +18,20 @@ import '../root.dart';
 import 'enter_pin.dart';
 
 class WithdrawUsernameSheet extends StatefulWidget {
-  const WithdrawUsernameSheet({super.key});
+  final String? receiverName;
+  final String? receiverUsername;
+  final int? amount;
+  final String? narration;
+  final String? clientReference;
+  final int? receiverId;
+  final String? currency;
+
+  const WithdrawUsernameSheet({super.key,
+    this.amount,
+    this.receiverName,
+    this.receiverUsername,
+    this.narration,
+    this.clientReference, this.receiverId, this.currency});
 
   @override
   State<WithdrawUsernameSheet> createState() => _WithdrawUsernameSheetState();
@@ -19,6 +39,60 @@ class WithdrawUsernameSheet extends StatefulWidget {
 
 class _WithdrawUsernameSheetState extends State<WithdrawUsernameSheet> {
   bool isChecked = false;
+  WalletModel? walletModel;
+  Username? username;
+  TedFinanceUser?  tedFinanceUser;
+//  SendMoneyResponse? sendMoneyResponse;
+
+  String? usernamePage;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() async {
+
+
+      Provider.of<DashboardProvider>(context, listen: false)
+          . getWalletInfo()
+          .then((value) {
+        if (mounted) {
+          setState(() {
+            walletModel = value;
+          });
+        }
+      });
+
+      Provider.of<DashboardProvider>(context, listen: false)
+          .sendMoneyToTedFinanceUser(
+        amount: widget.amount,
+      )
+          .then((value) {
+        if (mounted) {
+          setState(() {
+            tedFinanceUser = value;
+
+          });
+        }
+      });
+
+      Provider.of<DashboardProvider>(context, listen: false)
+          .lookupUsername(
+        widget.receiverName ?? '',
+
+      )
+          .then((value) {
+        if (mounted) {
+          setState(() {
+
+            username = value;
+          });
+        }
+      });
+    });
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -94,21 +168,53 @@ class _WithdrawUsernameSheetState extends State<WithdrawUsernameSheet> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Abdullateef Ayodele\nSalaudeen',
+
+                              // tedFinanceUser == null
+                              username == null
+                              ? ShimmerTextWidget(
+                              style: TextStyle(
+                                color: const Color(0xFF0C111D),
+                                fontSize: 14.sp,
+                                fontFamily: '',
+                                height: 1,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.w600,
+                              ))
+                              :Text( widget.receiverName ?? '',
                                   textAlign: TextAlign.right,
                                   style: CustomTextStyles.titleSmallBlack400
                                       .copyWith(
                                     fontWeight: FontWeight.w600,
                                   )),
-                              43.verticalSpace,
-                              Text('@iamofficialteo',
+                              63.verticalSpace,
+                              username == null
+                                  ? ShimmerTextWidget(
+                                  style: TextStyle(
+                                    color: const Color(0xFF0C111D),
+                                    fontSize: 14.sp,
+                                    fontFamily: '',
+                                    height: 1,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w600,
+                                  ))
+                                  :Text( widget.receiverUsername ?? '',
                                   style: CustomTextStyles.titleSmallBlack400
                                       .copyWith(
                                     fontWeight: FontWeight.w600,
                                   )),
-                              18.verticalSpace,
-                              Text(
-                                'Nigeria Naira',
+                              58.verticalSpace,
+                              username == null
+                                  ? ShimmerTextWidget(
+                                  style: TextStyle(
+                                    color: const Color(0xFF0C111D),
+                                    fontSize: 14.sp,
+                                    fontFamily: '',
+                                    height: 1,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w600,
+                                  ))
+                                  :Text(
+                                widget.currency ?? 'NiG',
                                 style:
                                     CustomTextStyles.titleSmallBlack400.copyWith(
                                   fontWeight: FontWeight.w600,
@@ -183,7 +289,7 @@ class _WithdrawUsernameSheetState extends State<WithdrawUsernameSheet> {
                                 ),
                                 8.verticalSpace,
                                 Text(
-                                  "N 0.00 ",
+                                    " ${Provider.of<DashboardProvider>(context).amount}",
                                   style: CustomTextStyles.titleMedium18
                                       .copyWith(fontSize: 34.sp),
                                 )
@@ -191,7 +297,7 @@ class _WithdrawUsernameSheetState extends State<WithdrawUsernameSheet> {
                             ),
                             Container(
 
-                                padding: EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                     color: AppColors.grey[65],
                                     borderRadius: BorderRadius.circular(30.r)),
@@ -220,10 +326,20 @@ class _WithdrawUsernameSheetState extends State<WithdrawUsernameSheet> {
               60.verticalSpace,
               AppButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
                    enterPinSheet(
                        context: context,
-                       isFromSellButton: false
+                       isFromSellButton: false,
+                     originPage: "sendToTedFinanceUser",
+                        receiverName: widget.receiverName,
+                        //widget.receiverName,
+                    receiverUsername: widget.receiverUsername,
+                       amount: widget.amount,
+                        narration: widget.narration,
+                  clientReference: widget.clientReference,
+                     receiverId: widget.receiverId,
+                      currency: widget.currency
+
+
 
                    );
                 },
@@ -238,4 +354,5 @@ class _WithdrawUsernameSheetState extends State<WithdrawUsernameSheet> {
       ),
     );
   }
+
 }

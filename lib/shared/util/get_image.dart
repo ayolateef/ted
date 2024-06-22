@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 
 class GetImage {
   static Future<File?> getFromGallery() async {
@@ -17,6 +18,14 @@ class GetImage {
     return null;
   }
 
+  Future<File?> selectFile() async {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      return File(result.files.single.path ?? '');
+    } else {
+      return null;
+    }
+  }
   /// Crop Image
   static Future<File?> _cropImage(filePath) async {
     File? croppedImage = (await ImageCropper().cropImage(

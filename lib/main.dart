@@ -382,6 +382,8 @@
 //   }
 // }
 
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -395,18 +397,26 @@ import 'package:tedfinance_mobile/core/Dashboard/routes.dart';
 import 'package:tedfinance_mobile/core/env/environment.dart';
 import 'package:tedfinance_mobile/core/env/utils/colors.dart';
 import 'package:tedfinance_mobile/providers/allproviders.dart';
+
 import 'package:tedfinance_mobile/providers/auth_provider.dart';
+import 'package:tedfinance_mobile/shared/models/auth_models/user.dart';
 import 'package:tedfinance_mobile/shared/navigations/routes/navigation_service.dart';
 import 'package:tedfinance_mobile/shared/navigations/routes/router.dart';
+import 'package:tedfinance_mobile/shared/util/storage.dart';
 import 'package:tedfinance_mobile/theme/theme_helper.dart';
 import 'core/auth/routes.dart';
+import 'core/env/app_config.dart';
 import 'core/env/utils/size_utils.dart';
 
 // List<CameraDescription>? cameras;
-void main() async {
+ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+
+
   //cameras = await availableCameras();
   //await Firebase.initializeApp();
+  //Crashlytics.instance.initialize();
 
   const String environment =
       String.fromEnvironment("ENVIRONMENT", defaultValue: Environment.DEV);
@@ -415,13 +425,14 @@ void main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(
-      const Directionality(
+       const Directionality(
           textDirection: TextDirection.ltr,
           child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+  const MyApp({Key? key,}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -476,10 +487,9 @@ class _MyAppState extends State<MyApp> {
               child: Navigator(
                 key: navigatorKey,
                 onGenerateRoute: routes,
-                initialRoute:
-                AuthRoutes.initial
+                initialRoute:AuthRoutes.initial
                // DashboardRoutes.uploadFiles
-               //  DashboardRoutes.bvnVerify
+              //  DashboardRoutes.kycProgress
               ),
             ),
           ),

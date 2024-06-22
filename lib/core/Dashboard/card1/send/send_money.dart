@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tedfinance_mobile/core/Dashboard/card1/send/add_recipient.dart';
-import 'package:tedfinance_mobile/core/Dashboard/kyc_verification.dart';
+import 'package:tedfinance_mobile/core/Dashboard/kyc/kyc_verification.dart';
 import 'package:tedfinance_mobile/shared/navigations/routes/navigation_service.dart';
 import 'package:tedfinance_mobile/shared/util/asset_images.dart';
 import 'package:tedfinance_mobile/shared/util/widgets/custom_elevated_button.dart';
@@ -40,6 +40,7 @@ class _SendMoneyState extends State<SendMoney> {
               CustomTextFormField(
                 headerText: "Send Currency",
                 hintText: "Select Country",
+                focusNode: null,
                 suffix: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: SvgPicture.asset(AssetResources.dropdownIcon)

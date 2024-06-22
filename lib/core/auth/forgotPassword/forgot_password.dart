@@ -5,9 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:tedfinance_mobile/providers/kyc_provider.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../shared/navigations/routes/navigation_service.dart';
 import '../../../shared/util/asset_images.dart';
+import '../../../shared/util/share_preference_util.dart';
 import '../../../shared/util/widgets/custom_elevated_button.dart';
 import '../../../shared/util/widgets/custom_text_form_field.dart';
 import '../../../theme/custom_text_style.dart';
@@ -18,7 +20,8 @@ import 'changed_password.dart';
 
 class ForgotPassword extends StatefulWidget {
   final String? email;
-  const ForgotPassword({super.key, required this.email});
+  final String? name;
+  const ForgotPassword({super.key, required this.email, this.name});
 
   @override
   State<ForgotPassword> createState() => _ForgotPasswordState();
@@ -32,16 +35,29 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmNewPasswordController = TextEditingController();
+  final TextEditingController _codeController = TextEditingController();
   late AuthenticationProvider authenticationProvider;
+  late KYCProvider kycProvider;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+
+  bool _isLoading = false;
+  late bool isVerified;
   @override
   void dispose() {
      focusNode.dispose();
     super.dispose();
   }
   @override
+  void initState() {
+    super.initState();
+    isVerified = false;
+    _isLoading = false;
+  }
+  @override
   Widget build(BuildContext context) {
     authenticationProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+    kycProvider = Provider.of<KYCProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: SafeArea(
@@ -227,6 +243,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                         child: CustomTextFormField(
                                           hintText: 'code',
                                           focusNode: focusNode,
+                                          controller: _codeController,
                                         ),
                                       ),
                                       25.horizontalSpace,
@@ -263,9 +280,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     child: AppButton(
                                       radius: 20.r,
                                       onPressed: (){
-                                        setState(() {
-                                          isChangedPassword = true;
-                                        });
+                                        verifyCode(_codeController.text);
+                                        // setState(() {
+                                        //   isChangedPassword = true;
+                                        // });
                                       },
                                       text: StringResources.change_password ,
                                     ),
@@ -331,7 +349,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                    child: AppButton(
                                      radius: 20.r,
                                      onPressed: (){
-                                       // _forgotPassword();
+                                        _forgotPassword();
                                        setState(() {
                                          isSendCode = true;
                                        });
@@ -394,9 +412,30 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     }
   }
   void resendCode() async {
-    AuthenticationProvider authenticationProvider =
-    Provider.of<AuthenticationProvider>(context, listen: false);
-    await authenticationProvider.resendOtp(email: widget.email ?? '');
+    final email = await SharedPreferenceUtils.getEmail();
+    await authenticationProvider.resendOtp(email:email ?? '');
+  }
+  void verifyCode(String code) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+
+    final email = await SharedPreferenceUtils.getEmail();
+
+    bool isVerified = await kycProvider.verifyOTP(phone: email, code: code);
+
+    if (isVerified) {
+      setState(() {
+        this.isVerified = isVerified;
+        _isLoading = false;
+        isChangedPassword = true;
+      });
+    } else {
+      AlertToast(context: context)
+          .showError(authenticationProvider.errorMessage);
+    }
+
   }
   void _updatePassword() async {
     try{
@@ -404,7 +443,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         AlertToast(context: context).showError("Passwords do not match");
 
       } else {
-        bool result =  await authenticationProvider.updatePassword(widget.email ?? '', _newPasswordController.text);
+
+        //final email = _emailController.text;
+        bool result =  await authenticationProvider.updatePassword(_newPasswordController.text);
         if (result) {
          pushToWithRoute(context, CustomRoutes.fadeIn(const ChangedPassword()) );
         } else {

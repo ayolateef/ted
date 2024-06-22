@@ -6,11 +6,13 @@ import 'package:tedfinance_mobile/shared/util/asset_images.dart';
 
 import '../../env/utils/colors.dart';
 
+
 class CustomBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemSelected;
 
-  const CustomBottomNavigationBar({super.key,
+  const CustomBottomNavigationBar({
+    super.key,
     required this.selectedIndex,
     required this.onItemSelected,
   });
@@ -19,31 +21,26 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.primaryColor,
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(5, (index) {
-          if (index == 0) {
-            return buildNavItem(index, context);
-          } else {
-            return buildNavItem(index, context);
-          }
+          bool isSelected = index == selectedIndex;
+          return buildNavItem(index, isSelected);
         }),
       ),
     );
   }
 
-  Widget buildNavItem(int index, BuildContext context) {
-    bool isSelected = index == selectedIndex;
-    return InkWell(
-        onTap: () {
-          if (index == 0) {
-            Future.delayed(const Duration(milliseconds: 300), () {
-              Scaffold.of(context).openDrawer();
-            });
-          } else {
-            onItemSelected(index);
-          }
-        },
+  Widget buildNavItem(int index, bool isSelected) {
+    String text = _getLabelText(index);
+    String displayText = isSelected && text.length > 5 ? text.substring(0, 5) : text;
+    return GestureDetector(
+      onTap: () {
+        if (index >= 0 && index < 5) {
+          onItemSelected(index);
+        }
+      },
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -51,43 +48,50 @@ class CustomBottomNavigationBar extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                width: isSelected ? 72.61 : 40,
-                height: isSelected ? 72.61 : 40,
+                width: isSelected ? 80.w : 60.w,
+                height: isSelected ? 80.h : 60.h,
+                curve: Curves.linear,
+                duration: const Duration(milliseconds: 100),
+                padding: isSelected
+                    ? const EdgeInsets.all(12.0) // increase padding when selected
+                    : const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isSelected ? Colors.white : Colors.transparent,
                 ),
-                alignment: Alignment((index - 1) * 2.0, 0.0),
-                child: Container(),
+                child: Center(
+                  child: SvgPicture.asset(
+                    _getIconPath(index),
+                    color: isSelected ? AppColors.primaryButtonColor : Colors.white,
+                    height: index==2 ? 25 : null,
+                  ),
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
-                child: Column(
-                  children: [
-                    SvgPicture.asset(
-                      _getIconPath(index),
-                      color: isSelected ? AppColors.primaryButtonColor : Colors.white,
-                      width: 24,
-                      height: 24,
-                    ),
-                    const SizedBox(height: 4),
-                    AnimatedDefaultTextStyle(
-                      duration: const Duration(milliseconds: 300),
-                      style: TextStyle(
-                        color: isSelected ? AppColors.tedPurpleText : AppColors.white,
-                        fontSize: 12.sp
+              Container(
+                margin: EdgeInsets.only(top: isSelected ? 50.h : 50.h),
+                child: AnimatedDefaultTextStyle(
+                  curve: Curves.linear,
+                  duration: const Duration(milliseconds: 100),
+                  style: TextStyle(
+                    color: isSelected ? AppColors.primaryButtonColor : Colors.white,
+                    fontSize: 12.sp,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      displayText,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
                       ),
-                      child: Text(
-                        _getLabelText(index),
-                      ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ],
           ),
-
         ],
       ),
     );
@@ -103,8 +107,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
         return AssetResources.bottomNavHomeIcon;
       case 3:
         return AssetResources.bottomNavSendIcon;
-      default:
+      case 4:
         return AssetResources.bottomNavInvestIcon;
+      default:
+        return '';
     }
   }
 
@@ -118,8 +124,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
         return 'Home';
       case 3:
         return 'Send Money';
-      default:
+      case 4:
         return 'Invest';
+      default:
+        return '';
     }
   }
 }
+
+

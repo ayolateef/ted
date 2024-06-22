@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../shared/navigations/routes/navigation_service.dart';
 import '../../../shared/util/asset_images.dart';
@@ -28,7 +30,9 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
   bool isCreatePin = false;
   bool isHovered = false;
   String createdPin = '';
+  late bool _isLoading = false;
   final TextEditingController _pinController = TextEditingController();
+  final storage = const FlutterSecureStorage();
   @override
   void dispose() {
 
@@ -116,9 +120,15 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
                                 child: AppButton(
                                   onPressed: () {
                                     if(!isCreatePin){
+                                      setState(() {
+                                        _isLoading = false;
+                                      });
                                       createPin();
                                     }else{
                                         confirmPin(_pinController.text);
+                                        setState(() {
+                                          _isLoading = true;
+                                        });
                                     }
 
                                   },
@@ -133,6 +143,20 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
 
                     ),
                   ),
+                  if (_isLoading)
+                    Visibility(
+                      visible: isCreatePin,
+                      child: Positioned.fill(
+                        child: Container(
+                          color: Colors.white.withOpacity(0.5),
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
                 ],
               ),
             ],
@@ -142,16 +166,22 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
     );
   }
 
-  void createPin() {
+  void createPin() async {
     createdPin = _pinController.text;
     setState(() {
       isCreatePin = true;
+      _isLoading = false;
     });
     _pinController.clear();
+
+    const storage = FlutterSecureStorage();
+    await storage.write(key: 'pin', value: createdPin);
   }
 
   void confirmPin(String code) async {
-    if (code == createdPin) {
+    const storage = FlutterSecureStorage();
+    final storedPin = await storage.read(key: 'pin');
+    if (code == storedPin) {
       AuthenticationProvider authenticationProvider =
       Provider.of<AuthenticationProvider>(context, listen: false);
      // bool isConfirmed = await authenticationProvider.createPin(_pinController.text);

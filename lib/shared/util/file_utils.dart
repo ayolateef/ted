@@ -1,5 +1,9 @@
 import 'dart:io';
 import 'dart:ui' as ui;
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,4 +58,27 @@ Future<File?> cropImage(XFile documentImages) async {
   );
 
   return croppedFile;
+}
+
+Future<pw.Document> generatePdf() async {
+  final doc = pw.Document();
+  final page = pw.Page(
+    build: (context) {
+      return pw.Center(
+        child: pw.Text('Transaction Details'),
+      );
+    },
+  );
+  doc.addPage(page);
+  return doc;
+}
+
+class PdfUtils {
+  static Future<String> saveAndSharePdf(pw.Document pdf,  String filename) async {
+    final bytes = await pdf.save();
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/$filename');
+    await file.writeAsBytes(bytes);
+    return file.path;
+  }
 }

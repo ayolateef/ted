@@ -2,11 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:tedfinance_mobile/core/Dashboard/dashboard.dart';
 import 'package:tedfinance_mobile/shared/util/widgets/custom_elevated_button.dart';
 import '../../../shared/navigations/routes/navigation_service.dart';
 import '../../../shared/util/asset_images.dart';
 import '../../../theme/custom_text_style.dart';
-import '../../Dashboard/kyc_identity.dart';
+import '../../Dashboard/kyc/kyc_identity.dart';
 import '../../env/utils/colors.dart';
 import '../../env/utils/string_resources.dart';
 
@@ -87,7 +88,7 @@ class _ChangedPasswordState extends State<ChangedPassword> {
                             AppButton(
                               onPressed: () {
                                 PageNavigator(ctx: context).nextPageOnly(
-                                    page: const KYCIdentity());
+                                    page: const DashboardScreen());
                               },
                               text: "Ok",
                               radius: 20.r,

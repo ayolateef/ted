@@ -5,8 +5,7 @@ class ProdConfig implements BaseConfig {
 
   String get CDN_URL => "https://d3f0n3oggzz6vo.cloudfront.net/";
 
-  String get BASE_URL =>
-      "https://iw5ntva5r5.execute-api.af-south-1.amazonaws.com/dev";
+  String get BASE_URL => "https://iw5ntva5r5.execute-api.af-south-1.amazonaws.com/dev";
   // String get BASE_URL => "https://dev.trybeone.ng";
 
   String get SMILE_SIGNATURE => "M9i3DzQriM1/mG0dayZ2HUn4JzUtMSkGynEugPcAln0=";

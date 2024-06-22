@@ -46,14 +46,14 @@ class BuyAirtime  extends StatelessWidget {
                 hintText: "NGN 0.00",
               ),
               30.verticalSpace,
-              CustomDropdownFormField(
-                headerText: "Network",
-                hintText: "Select Network",
-                currencies: const ["MTN", "GLO"],
-                onChanged: (currency) {
-                  // Do something with the selected currency
-                },
-              ),
+              // CustomDropdownFormField(
+              //   headerText: "Network",
+              //   hintText: "Select Network",
+              //   currencies: const ["MTN", "GLO"],
+              //   onChanged: (currency) {
+              //     // Do something with the selected currency
+              //   },
+              // ),
               40.verticalSpace,
               const CustomTextFormField(
                 headerText: "Phone number",
