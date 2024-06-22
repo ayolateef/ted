@@ -25,13 +25,15 @@ class WithdrawUsernameSheet extends StatefulWidget {
   final String? clientReference;
   final int? receiverId;
   final String? currency;
+  final   TedFinanceUser?  tedFinanceUser;
 
   const WithdrawUsernameSheet({super.key,
     this.amount,
     this.receiverName,
     this.receiverUsername,
     this.narration,
-    this.clientReference, this.receiverId, this.currency});
+    this.clientReference, this.receiverId, this.currency,
+    this.tedFinanceUser});
 
   @override
   State<WithdrawUsernameSheet> createState() => _WithdrawUsernameSheetState();
@@ -48,6 +50,7 @@ class _WithdrawUsernameSheetState extends State<WithdrawUsernameSheet> {
 
   @override
   void initState() {
+    tedFinanceUser = widget.tedFinanceUser;
     super.initState();
     Future.microtask(() async {
 
@@ -62,18 +65,18 @@ class _WithdrawUsernameSheetState extends State<WithdrawUsernameSheet> {
         }
       });
 
-      Provider.of<DashboardProvider>(context, listen: false)
-          .sendMoneyToTedFinanceUser(
-        amount: widget.amount,
-      )
-          .then((value) {
-        if (mounted) {
-          setState(() {
-            tedFinanceUser = value;
-
-          });
-        }
-      });
+      // Provider.of<DashboardProvider>(context, listen: false)
+      //     .sendMoneyToTedFinanceUser(
+      //   amount: widget.amount,
+      // )
+      //     .then((value) {
+      //   if (mounted) {
+      //     setState(() {
+      //       tedFinanceUser = value;
+      //
+      //     });
+      //   }
+      // });
 
       Provider.of<DashboardProvider>(context, listen: false)
           .lookupUsername(
@@ -95,6 +98,7 @@ class _WithdrawUsernameSheetState extends State<WithdrawUsernameSheet> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.tedFinanceUser?.toJson());
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 55.h),
       child: SizedBox(
@@ -169,51 +173,20 @@ class _WithdrawUsernameSheetState extends State<WithdrawUsernameSheet> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
 
-                              // tedFinanceUser == null
-                              username == null
-                              ? ShimmerTextWidget(
-                              style: TextStyle(
-                                color: const Color(0xFF0C111D),
-                                fontSize: 14.sp,
-                                fontFamily: '',
-                                height: 1,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.w600,
-                              ))
-                              :Text( widget.receiverName ?? '',
+                             Text( tedFinanceUser?.destinationAccountName ?? '',
                                   textAlign: TextAlign.right,
                                   style: CustomTextStyles.titleSmallBlack400
                                       .copyWith(
                                     fontWeight: FontWeight.w600,
                                   )),
                               63.verticalSpace,
-                              username == null
-                                  ? ShimmerTextWidget(
-                                  style: TextStyle(
-                                    color: const Color(0xFF0C111D),
-                                    fontSize: 14.sp,
-                                    fontFamily: '',
-                                    height: 1,
-                                    fontStyle: FontStyle.normal,
-                                    fontWeight: FontWeight.w600,
-                                  ))
-                                  :Text( widget.receiverUsername ?? '',
+                      Text(  tedFinanceUser?.destinationAccount ?? '',
                                   style: CustomTextStyles.titleSmallBlack400
                                       .copyWith(
                                     fontWeight: FontWeight.w600,
                                   )),
                               58.verticalSpace,
-                              username == null
-                                  ? ShimmerTextWidget(
-                                  style: TextStyle(
-                                    color: const Color(0xFF0C111D),
-                                    fontSize: 14.sp,
-                                    fontFamily: '',
-                                    height: 1,
-                                    fontStyle: FontStyle.normal,
-                                    fontWeight: FontWeight.w600,
-                                  ))
-                                  :Text(
+                             Text(
                                 widget.currency ?? 'NiG',
                                 style:
                                     CustomTextStyles.titleSmallBlack400.copyWith(
@@ -228,7 +201,7 @@ class _WithdrawUsernameSheetState extends State<WithdrawUsernameSheet> {
                     ),
                     5.verticalSpace,
                     Row(
-                      //mainAxisAlignment: MainAxisAlignment.center,
+
                       children: [
                         Container(),
                         20.horizontalSpace,
@@ -330,10 +303,10 @@ class _WithdrawUsernameSheetState extends State<WithdrawUsernameSheet> {
                        context: context,
                        isFromSellButton: false,
                      originPage: "sendToTedFinanceUser",
-                        receiverName: widget.receiverName,
+                        receiverName: widget.tedFinanceUser?.destinationAccountName,
                         //widget.receiverName,
-                    receiverUsername: widget.receiverUsername,
-                       amount: widget.amount,
+                    receiverUsername: widget.tedFinanceUser?.destinationAccount,
+                       amount: widget.tedFinanceUser?.amount,
                         narration: widget.narration,
                   clientReference: widget.clientReference,
                      receiverId: widget.receiverId,

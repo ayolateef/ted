@@ -7,9 +7,9 @@ class TedFinanceUser {
   String? destinationAccount;
   String? clientReference;
   String? transactionReference;
-  int? amount;
-  int? charge;
-  int? totalAmount;
+  double? amount;
+  double? charge;
+  double? totalAmount;
   String? destinationAccountName;
   String? transferType;
   DateTime? timestamp = DateTime.now();

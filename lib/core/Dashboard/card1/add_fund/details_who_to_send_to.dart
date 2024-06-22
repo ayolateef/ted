@@ -8,7 +8,6 @@ import 'package:tedfinance_mobile/shared/util/widgets/custom_text_form_field.dar
 import '../../../../shared/util/widgets/appbar.dart';
 import '../../../../theme/custom_text_style.dart';
 import '../../../env/utils/colors.dart';
-import '../../../env/utils/string_resources.dart';
 import 'add_fund_to_wallet.dart';
 
 class DetailsFundAccount extends StatefulWidget {

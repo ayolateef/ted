@@ -28,7 +28,7 @@ class EnterPinSheet extends StatefulWidget {
   final String? originPage;
   final String? receiverName;
   final String? receiverUsername;
-  final int? amount;
+  final double? amount;
   final String? narration;
   final String? clientReference;
   final int? receiverId;
@@ -57,7 +57,7 @@ class _EnterPinSheetState extends State<EnterPinSheet> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _enterPinController = TextEditingController();
+
   }
 
   @override
@@ -169,7 +169,7 @@ class _EnterPinSheetState extends State<EnterPinSheet> {
           if (mounted) {
             paymentSuccessSheet(
                 context: context,
-                totalAmount: tedFinanceUser?.totalAmount,
+                totalAmount: tedFinanceUser?.totalAmount?.toInt(),
               referenceNumber: tedFinanceUser?.clientReference,
                 paymentTime: DateFormat('yyyy-MM-dd HH:mm:ss').format(tedFinanceUser?.timestamp ?? DateTime.now()),
               paymentMethod: tedFinanceUser?.transferType,

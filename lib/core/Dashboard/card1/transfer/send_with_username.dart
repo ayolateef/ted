@@ -1,16 +1,11 @@
 import 'dart:async';
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:tedfinance_mobile/providers/auth_provider.dart';
 import 'package:tedfinance_mobile/providers/dashboard_provider.dart';
 import 'package:tedfinance_mobile/shared/models/auth_models/user.dart';
 import 'package:tedfinance_mobile/shared/util/widgets/custom_elevated_button.dart';
-
 import '../../../../shared/models/dashboard_models/card_bal_model.dart';
 import '../../../../shared/models/dashboard_models/current_ex_model.dart';
 import '../../../../shared/models/dashboard_models/transfer_tedFinance_user.dart';
@@ -38,6 +33,7 @@ class _SendWithUsernameState extends State<SendWithUsername> {
   String _selectedCurrency = '';
   final selectedCurrency = SelectedCurrency();
   late DashboardProvider dashboardProvider ;
+  late AuthenticationProvider authenticationProvider;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _fundSourceController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
@@ -52,8 +48,8 @@ class _SendWithUsernameState extends State<SendWithUsername> {
   int? _amount;
   Utilities utils = Utilities();
   TedFinanceUser? tedFinanceUser;
-
-  User? user;
+  String? name;
+User? user;
 
   void _handleSelection(String value) {
     final currency = value.split('-')[0];
@@ -129,6 +125,12 @@ class _SendWithUsernameState extends State<SendWithUsername> {
   @override
   Widget build(BuildContext context) {
     dashboardProvider = Provider.of<DashboardProvider>(context, listen: false);
+      authenticationProvider =   Provider.of<AuthenticationProvider>(context, listen: false);
+
+
+
+
+
     return Scaffold(
         appBar: const TedAppBar(
           elevation: 0,
@@ -156,6 +158,7 @@ class _SendWithUsernameState extends State<SendWithUsername> {
                   autofocus: false,
                   onChange: (currency) {
                     _selectedCurrency = currency;
+                    print(_selectedCurrency);
                     setState(() {});
                   },
                   suffix: DropdownButton(
@@ -307,20 +310,33 @@ class _SendWithUsernameState extends State<SendWithUsername> {
   }
   Future <void> sendMoneyWithUsername() async {
     try {
-      print('receiverId: ${usernameModel!.id!}');
-      await dashboardProvider.sendMoneyToTedFinanceUser(
-        amount: _amount?.toInt() ,
-        recieverId: usernameModel?.id ?? 0,
-        clientReference:  utils.generateClientReference(),
-        narration: _narrationController.text
+      // print('receiverId: ${usernameModel!.id!}');
+      TedFinanceUser  tedFinanceUser = TedFinanceUser(
+        sourceAccountName: "${authenticationProvider.user?.firstName} ${authenticationProvider.user?.lastName}",
+        sourceAccount: "",
+        destinationAccountName: "${usernameModel?.firstName}${usernameModel?.lastName}",
+        destinationAccount:  _usernameController.text,
+        amount: double.parse(_amountController.text),
+
+        transferType: ""
       );
+
+
+
+
+  // TedFinanceUser tedFinanceUser =    await dashboardProvider.sendMoneyToTedFinanceUser(
+  //       amount: _amount?.toInt() ,
+  //       recieverId: usernameModel?.id ?? 0,
+  //       clientReference:  utils.generateClientReference(),
+  //       narration: _narrationController.text
+  //     );
       withdrawWithUsernameSheet(
           context: context,
           amount: _amount?.toInt(),
           recieverId: usernameModel?.id,
+          tedFinanceUser: tedFinanceUser,
           receiverName:
-          //"${usernameModel!.firstName} ${usernameModel?.lastName}",
-          tedFinanceUser?.sourceAccountName,
+          tedFinanceUser.sourceAccountName,
           receiverUsername:
           //usernameModel!.username,
           _usernameController.text,

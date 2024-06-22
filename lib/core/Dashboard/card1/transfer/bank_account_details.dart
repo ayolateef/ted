@@ -92,11 +92,11 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
               children: [
                 AppDropdownModal(
                   prefixIcon: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8.0, top: 5.0, right: 15, bottom: 8),
+                    padding:  EdgeInsets.all(15.w),
+
                     child: SvgPicture.asset(
                       AssetResources.addPayIcon,
-                      height: 35,
+                      height: 22,
                       width: 22,
                     ),
                   ),
@@ -204,7 +204,8 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                   },
                   radius: 30.r,
                   text: 'Continue',
-                )
+                ),
+                20.verticalSpace,
               ],
             ),
           ),

@@ -168,7 +168,7 @@ void enterPinSheet({
   String? originPage,
   final String? receiverName,
   final String? receiverUsername,
-  final int? amount,
+  final double? amount,
   final String? narration,
   final String? clientReference,
   final int? receiverId,
@@ -279,6 +279,7 @@ void  withdrawWithUsernameSheet ({
   int? recieverId,
   String? clientReference,
   String? narration,
+
 }) {
   showModalBottomSheet(
     context: context!,
@@ -293,7 +294,8 @@ void  withdrawWithUsernameSheet ({
         clientReference: clientReference,
         narration: narration,
         receiverId: recieverId,
-        currency: currency
+        currency: currency,
+        tedFinanceUser: tedFinanceUser,
 
       );
     },

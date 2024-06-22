@@ -20,7 +20,6 @@ import 'package:tedfinance_mobile/shared/navigations/routes/navigation_service.d
 
 import '../../providers/dashboard_provider.dart';
 import '../../providers/kyc_provider.dart';
-import '../../shared/models/auth_models/user.dart';
 import '../../shared/models/dashboard_models/card_transactions_model.dart';
 import '../../shared/models/dashboard_models/wallet_model.dart';
 import '../../shared/util/asset_images.dart';
@@ -37,7 +36,6 @@ import 'card1/add_fund/add_fund_to_wallet.dart';
 import 'card1/cards/virtual_cards.dart';
 import 'card1/report/report_page.dart';
 import 'card1/send/send_money.dart';
-import 'card1/transfer/send_with_username.dart';
 import 'card1/transfer/traansfer.dart';
 import 'kyc/kyc-progress.dart';
 import 'kyc/kyc_identity.dart';
